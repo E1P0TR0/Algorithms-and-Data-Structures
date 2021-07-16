@@ -1,6 +1,7 @@
 #ifndef Linked_List_hpp
 #define Linked_List_hpp
 
+#include <iostream>
 #include <cstdlib> // malloc
 #include <stdexcept> // throw
 #include "Linked_List_Node.hpp"
@@ -25,9 +26,6 @@ namespace MRS
         }
 
         void destroy(Node<T> *item_to_remove) { free(item_to_remove); }
-
-    public:
-        LinkedList() : head(nullptr), length(0) {}
 
         void insert(T new_data, int index)
         {
@@ -74,6 +72,56 @@ namespace MRS
             for(int i = 0; i < index; ++i)
                 current = current->get_next(); 
             return current;
+        }
+
+        // Obtener posición de nodo
+        int getPos(T new_data)
+        {
+            Node<T> *current = head;
+            int cont = -1;
+            while(current != nullptr)
+            {
+                cont++;
+                if(current->get_data() == new_data)
+                    return cont;
+                current = current->get_next();
+            }
+            return cont;
+        }
+
+
+    public:
+        LinkedList() : head(nullptr), length(0) {}
+
+        void insert_begin(T new_data) { insert(new_data, 0); }
+
+        void insert_pos(T new_data, int position) { insert(new_data, position); }
+
+        void insert_end(T new_data) { insert(new_data, length); }
+
+        void remove_begin() { remove(0); }
+
+        void remove_pos(int position) { remove(position); }
+
+        void remove_end() { remove(length - 1); }
+
+        void update_begin(T new_data)
+        {
+            remove_begin();
+            insert_begin(new_data);
+        }
+
+        void update_by(T old_data, T new_data)
+        {
+            int new_data_pos = getPos(old_data);
+            remove_pos(new_data_pos);
+            insert_pos(new_data, new_data_pos);
+        }
+
+        void update_end(T new_data)
+        {
+            remove_end();
+            insert_end(new_data);
         }
 
         // Imprimir elementos
