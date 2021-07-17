@@ -17,6 +17,7 @@ namespace MRS
         Node<T> *head;
         int length;
 
+        // Crear nodo en memoria
         Node<T>* create(T new_data)
         {
             Node<T> *new_node = (Node<T> *)malloc(sizeof(Node<T>));
@@ -25,8 +26,10 @@ namespace MRS
             return new_node;
         }
 
+        // Eliminar nodo en memoria
         void destroy(Node<T> *item_to_remove) { free(item_to_remove); }
 
+        // Insertat Nodo
         void insert(T new_data, int index)
         {
             Node<T> *item_to_insert = create(new_data);
@@ -45,6 +48,7 @@ namespace MRS
             length += 1;
         }
 
+        // Eliminar nodo
         void remove(int index)
         {
             if(index == 0)
@@ -89,6 +93,45 @@ namespace MRS
             return cont;
         }
 
+        // Revertir lista manera iterativa
+        void iterative_reverse()
+        {
+            Node<T> *previous = nullptr;
+            Node<T> *current = head;
+            Node<T> *next = nullptr;
+            while(current != nullptr)
+            {
+                next = current->get_next();
+                current->set_next(previous);
+                previous = current;
+                current = next;
+            }
+            head = previous;
+        }
+
+        // Revertir lista manera recursiva
+        void recursive_reverse(Node<T> *current)
+        {
+            if(current == nullptr || current->get_next() == nullptr)
+            {
+                head = current;
+                return;
+            }
+            recursive_reverse(current->get_next());
+            Node<T> *current_next = current->get_next();
+            current_next->set_next(current);
+            current->set_next(nullptr);
+        }
+
+        // Impresión reversa
+        void print_reverse(Node<T> *current)
+        {
+            if(current == nullptr)
+                return;
+            print_reverse(current->get_next());
+            std::cout << current->get_data();
+            (current != head) ? std::cout << " -> " : std::cout << " -> NULL\n";
+        }
 
     public:
         LinkedList() : head(nullptr), length(0) {}
@@ -124,6 +167,8 @@ namespace MRS
             insert_end(new_data);
         }
 
+        void reverse() { recursive_reverse(head); }
+        
         // Imprimir elementos
         void print()
         {
@@ -135,6 +180,9 @@ namespace MRS
             }
             std::cout << "NULL" << std::endl;
         }
+
+        void reverse_print() { print_reverse(head); }
+
     };
 
 }

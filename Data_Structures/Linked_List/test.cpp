@@ -13,13 +13,17 @@ int main()
     list->insert_pos(3, 3);
     list->insert_end(5);
 
+    // list->print();
+
+    // list->remove_pos(1);
+
+    // list->print();
+
+    // list->update_by(2, 123);
+
     list->print();
 
-    list->remove_pos(1);
-
-    list->print();
-
-    list->update_by(2, 123);
+    list->reverse();
 
     list->print();
 
