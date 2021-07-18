@@ -133,6 +133,75 @@ namespace MRS
             (current != head) ? std::cout << " -> " : std::cout << " -> NULL\n";
         }
 
+        // Ordenar lista
+        void merge_sort(Node<T> **head_ref)
+        {
+            Node<T> *new_head = *head_ref;  
+            Node<T> *left_list, *right_list;
+            // Caso base - Lista con un elemento o vacía
+            if(new_head == nullptr || new_head->get_next() == nullptr)
+                return;
+            // Crear las dos sublistas
+            front_back_split(new_head, &left_list, &right_list);
+            // Las ordenamos de manera recursiva
+            merge_sort(&left_list);
+            merge_sort(&right_list);
+            // Juntamos las dos listas ya ordenadas y asignamos el nuevo head
+            *head_ref = sorted_merge(left_list, right_list);        
+        }
+        Node<T>* sorted_merge(Node<T> *left_list, Node<T> *right_list)
+        {
+            Node<T> *result = nullptr;
+            // Caso base - Una de las dos listas está vacía, retornamos la no vacía
+            if(left_list == nullptr)
+                return right_list;
+            else if(right_list == nullptr)
+                return left_list;
+            // Evaluamos el criterio de ordenamiento - de menor a mayor
+            if(left_list->get_data() <= right_list->get_data())
+            {
+                result = left_list;
+                result->set_next(
+                    sorted_merge(left_list->get_next(), right_list)
+                );
+            }
+            else
+            {
+                result = right_list;
+                result->set_next(
+                    sorted_merge(left_list, right_list->get_next())
+                );
+            }
+            return result;
+        }
+        void front_back_split(Node<T> *source, Node<T> **left_ref, Node<T> **right_ref)
+        {
+            Node<T> *fast;
+            Node<T> *slow;
+            slow = source;
+            fast = source->get_next();
+            // Avanzamos el nodo 'fast' dos veces y el nodo 'slow' solo una vez
+            while(fast != nullptr)
+            {
+                fast = fast->get_next();
+                if(fast != nullptr)
+                {
+                    slow = slow->get_next();
+                    fast = fast->get_next();
+                }
+            }
+            // El nodo slow se encuentra en medio del punto medio, asi que lo usamos de referencia
+            *left_ref = source;
+            *right_ref = slow->get_next();
+            slow->set_next(nullptr);
+        }
+
+        // Unir dos listas enlazadas ordenadas
+        void merge()
+        {
+
+        }
+
     public:
         LinkedList() : head(nullptr), length(0) {}
 
@@ -183,6 +252,7 @@ namespace MRS
 
         void reverse_print() { print_reverse(head); }
 
+        void sort() { merge_sort(&head); }
     };
 
 }
