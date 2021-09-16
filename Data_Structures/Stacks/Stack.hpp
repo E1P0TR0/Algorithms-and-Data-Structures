@@ -56,6 +56,8 @@ namespace STACK
 
         void pop() { remove(); }
 
+        T get_top() { return top->get_data(); }
+
         void print()
         {
             Node<T> *current = top;

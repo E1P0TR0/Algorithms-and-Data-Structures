@@ -6,7 +6,7 @@
 #include <stdexcept> // throw
 #include "Linked_List_Node.hpp"
 
-namespace MRS
+namespace LList
 {
 
     template <class T>
@@ -34,12 +34,18 @@ namespace MRS
         {
             Node<T> *item_to_insert = create(new_data);
             // Lista vacia
+            if(head == nullptr)
+            {
+                head = item_to_insert;
+                return;
+            }
+            // Insersión primera posición
             if(index == 0)
             {
                 item_to_insert->set_next(head);
                 head = item_to_insert;
             }
-            else
+            else // demás posiciones 
             {
                 Node<T>* current = iterate(index - 1); // Restamos para ubicarnos antes de la posición a insertar
                 item_to_insert->set_next(current->get_next());
@@ -51,6 +57,9 @@ namespace MRS
         // Eliminar nodo
         void remove(int index)
         {
+            // Lista vacia
+            if(head == nullptr)
+                return;
             if(index == 0)
             {
                 Node<T> *item_to_remove = head;
@@ -78,7 +87,7 @@ namespace MRS
             return current;
         }
 
-        // Obtener posición de nodo
+        // Obtener posición de nodo - lista sin duplicados
         int getPos(T new_data)
         {
             Node<T> *current = head;
@@ -91,6 +100,12 @@ namespace MRS
                 current = current->get_next();
             }
             return cont;
+        }
+
+        T retrieve(int index)
+        {
+            Node<T> *cursor = iterate(index);
+            return cursor->get_data();
         }
 
         // Revertir lista manera iterativa
@@ -133,7 +148,7 @@ namespace MRS
             (current != head) ? std::cout << " -> " : std::cout << " -> NULL\n";
         }
 
-        // Ordenar lista
+        // Ordenar lista - unir listas ordenadas a una ordenada
         void merge_sort(Node<T> **head_ref)
         {
             Node<T> *new_head = *head_ref;  
@@ -196,15 +211,55 @@ namespace MRS
             slow->set_next(nullptr);
         }
 
-        // Unir dos listas enlazadas ordenadas
-        void merge()
+        // Eliminar duplicados -> modo iterativo // Mas de dos iguales no los elimina
+        void delete_duplicates_iterative()
         {
-
+            // Lista vacía o con solo un elemento
+            if(!head || !head->get_next()) return;
+            // Creamos puntero para recorrer lista
+            Node<T> *current = head;
+            Node<T> *new_next = nullptr;
+            // Recorremos lista
+            while(current->get_next() != nullptr)
+            {
+                if(current->get_data() == current->get_next()->get_data())
+                {
+                    new_next = current->get_next()->get_next();
+                    destroy(current->get_next());
+                    current->set_next(new_next);
+                    length -= 1;
+                }
+                else 
+                    current = current->get_next();
+            }
         }
+
+        // Eliminar duplicados -> modo recursivo // Mas de dos iguales no los elimina
+        Node<T>* delete_duplicates_recursive(Node<T> **head_ref)
+        {
+            Node<T> *new_head = *head_ref;
+            if(!new_head || !new_head->get_next())
+                return new_head;
+            Node<T> *aux = new_head->get_next();
+            new_head->set_next(delete_duplicates_recursive(&aux));
+            if(new_head->get_data() == new_head->get_next()->get_data())
+            {
+                length--;
+                return new_head->get_next(); 
+            }  
+            else
+                return new_head;
+            return new_head;
+        }
+
 
     public:
         LinkedList() : head(nullptr), length(0) {}
 
+        Node<T>* get_head() { return head; }
+        
+        int get_length() { return length; }
+        
         void insert_begin(T new_data) { insert(new_data, 0); }
 
         void insert_pos(T new_data, int position) { insert(new_data, position); }
@@ -253,6 +308,8 @@ namespace MRS
         void reverse_print() { print_reverse(head); }
 
         void sort() { merge_sort(&head); }
+
+        void remove_duplicates() { head = delete_duplicates_recursive(&head); }
     };
 
 }

@@ -10,8 +10,8 @@ int recursiveBinarySearch(int number, std::vector<int> vect, int left, int right
     // De acuerdo al resultado ser dirige a la mitad de numeros menores o de mayores partiendo de la mitad.
     // Se repite el proceso con la posibilidad encontrar el numero
     // Tener en cuenta que el arreglo debe estar ordenado
-
-    if (right >= left)
+  
+    if (right >= left)  
     {
         int middle = left + (right - left) / 2;
         if (number == vect[middle])

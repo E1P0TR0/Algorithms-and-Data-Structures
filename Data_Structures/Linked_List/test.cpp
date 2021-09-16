@@ -4,19 +4,17 @@
 
 int main()
 {
-    MRS::LinkedList<int>* list = new MRS::LinkedList<int>(); 
+    LList::LinkedList<int>* list = new LList::LinkedList<int>(); 
 
-    list->insert_begin(4);
-    list->insert_begin(-1);
-    list->insert_end(1);
-    list->insert_end(2);
-    list->insert_end(7);
-    list->insert_pos(3, 3);
-    list->insert_end(0);
+    list->insert_begin(3);
+    list->insert_begin(3);
+    list->insert_begin(2);
+    list->insert_begin(1);
+    list->insert_begin(1);
 
     list->print();
 
-    list->sort();
+    list->remove_duplicates();
 
     list->print();
 

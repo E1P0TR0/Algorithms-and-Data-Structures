@@ -48,21 +48,72 @@ int get_top()
 
 // En un arreglo como Stack, si existe desbordamiento de sa en un tiempo de O(n) -> n = length of array
 
+#include <string>
 #include "Stack.hpp"
+
+bool validate(std::string);
 
 int main()
 {
-    STACK::Stack<int>* stack = new STACK::Stack<int>();
+    STACK::Stack<char>* stack = new STACK::Stack<char>();
 
-    stack->push(0);
-    stack->push(1);
-    stack->push(2);
-    stack->push(3);
-
-    stack->pop();
-    stack->pop();
-
-    stack->print();
+    std::string line = "()"; 
+    std::cout << validate(line);
 
     return 0;
 }
+
+// *REVERSE LIKED LIST CODE with stack
+/*
+template <class T, class U>
+void reverse()
+{
+    if(head == nullptr)
+        return;
+    STACK::Stack<T> *stack = new STACK::Stack<T>();
+    LList::Node<U> *temp = head;
+    while(temp != nullptr)
+    {
+        stack->push(temp);
+        temp = temp->get_next();
+    }
+    temp = stack->get_top();
+    head = temp;
+    while(!stack->itsEmpty())
+    {
+        temp->set_next(stack->get_top());
+        stack->pop();
+        temp = temp->get_next();
+    }
+    temp->set_next(nullptr);
+}
+*/
+
+// ? {} () [] BALANCE PARENTHESES
+bool validate(std::string line)
+{
+    STACK::Stack<char> *stack = new STACK::Stack<char>();
+    for(auto value : line)
+    {
+        if(value == '(' || value == '[' || value == '{')
+            stack->push(value);
+        else 
+        {
+            if(stack->itsEmpty()) return false;
+            else
+            {
+                if(value == ')' && stack->get_top() == '(')
+                    stack->pop();
+                else if(value == ']' && stack->get_top() == '[')
+                        stack->pop();
+                else if(value == '}' && stack->get_top() == '{')
+                        stack->pop();
+                else 
+                    return false;  
+            }
+        } 
+    }
+    return stack->itsEmpty();
+}
+
+

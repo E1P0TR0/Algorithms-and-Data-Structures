@@ -1,7 +1,7 @@
 #ifndef Linked_List_Node_hpp
 #define Linked_List_Node_hpp
 
-namespace MRS
+namespace LList
 {
 
     template <class T>
